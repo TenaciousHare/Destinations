@@ -47,31 +47,42 @@ function App() {
 
   return (
     <div className="wrapper">
-      <div className="list">
-        <div className="name">
-          <p>Imię: ....................</p>
-          <p>Nazwisko: ....................</p>
-          <p>Data: ....................</p>
-        </div>
-        <h2>
-          1. Napisz, które destynacje są w strefie Schengen, a które w
-          Non-Schengen, oraz rozwiń skróty lotnisk
-        </h2>
-        <ul>
-          {abbr.map((abbr) => (
-            <li key={abbr}>{abbr}</li>
-          ))}
-        </ul>
-        <h2>2. Zapisz skróty lotnisk według kodów IATA + Państwo</h2>
-        <ul>
-          {exp.map((exp) => (
-            <li key={exp}>{exp}</li>
-          ))}
-        </ul>
-      </div>
       <div>
         <button onClick={() => window.print()}>DRUKUJ</button>
         <button onClick={handleGenerate}>GENERUJ</button>
+      </div>
+      <div className="list">
+        <div className="page">
+          <div className="name">
+            <p>Imię: ....................</p>
+            <p>Nazwisko: ....................</p>
+            <p>Data: ....................</p>
+          </div>
+
+          <h2>
+            1. Napisz, które destynacje są w strefie Schengen, a które w
+            Non-Schengen, oraz rozwiń skróty lotnisk
+          </h2>
+          <ul>
+            {abbr.map((abbr) => (
+              <div key={abbr}>
+                <li>{abbr}</li>
+                <hr />
+              </div>
+            ))}
+          </ul>
+        </div>
+        <div className="page">
+          <h2>2. Zapisz skróty lotnisk według kodów IATA + Państwo</h2>
+          <ul>
+            {exp.map((exp) => (
+              <div key={exp}>
+                <li>{exp}</li>
+                <hr />
+              </div>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
