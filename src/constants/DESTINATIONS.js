@@ -72,9 +72,21 @@ export const DEST_KTW = [
     zone: "Schengen",
   },
   {
+    abbreviation: "CRL",
+    expansion: "Bruksela - Charleroi",
+    country: "Belgia",
+    zone: "Schengen",
+  },
+  {
     abbreviation: "CTA",
     expansion: "Katania",
     country: "Włochy (Sycylia)",
+    zone: "Schengen",
+  },
+  {
+    abbreviation: "DBV",
+    expansion: "Dubrownik",
+    country: "Chorwacja",
     zone: "Schengen",
   },
   {
