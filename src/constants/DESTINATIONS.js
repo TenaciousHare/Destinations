@@ -60,6 +60,12 @@ export const DEST_KTW = [
     zone: "Schengen",
   },
   {
+    abbreviation: "BUD",
+    expansion: "Budapeszt",
+    country: "Węgry",
+    zone: "Schengen",
+  },
+  {
     abbreviation: "CFU",
     expansion: "Korfu",
     country: "Grecja",
@@ -279,6 +285,12 @@ export const DEST_KTW = [
 
 export const DEST_KRK = [
   {
+    abbreviation: "ABZ",
+    expansion: "Aberdeen",
+    country: "Wielka Brytania",
+    zone: "Non-Schengen",
+  },
+  {
     abbreviation: "AGA",
     expansion: "Agadir",
     country: "Maroko",
@@ -411,6 +423,12 @@ export const DEST_KRK = [
     zone: "Schengen",
   },
   {
+    abbreviation: "CDT",
+    expansion: "Castellon",
+    country: "Hiszpania",
+    zone: "Schengen",
+  },
+  {
     abbreviation: "CFU",
     expansion: "Korfu",
     country: "Grecja",
@@ -480,12 +498,6 @@ export const DEST_KRK = [
     abbreviation: "EMA",
     expansion: "East Midlands",
     country: "Wielka Brytania",
-    zone: "Non-Schengen",
-  },
-  {
-    abbreviation: "ETM",
-    expansion: "Eilat (Ramon)",
-    country: "Izrael",
     zone: "Non-Schengen",
   },
   {
@@ -603,6 +615,12 @@ export const DEST_KRK = [
     zone: "Schengen",
   },
   {
+    abbreviation: "MXP",
+    expansion: "Milan Malpensa",
+    country: "Włochy",
+    zone: "Schengen",
+  },
+  {
     abbreviation: "NAP",
     expansion: "Neapol",
     country: "Włochy",
@@ -657,12 +675,6 @@ export const DEST_KRK = [
     zone: "Schengen",
   },
   {
-    abbreviation: "POZ",
-    expansion: "Poznań",
-    country: "Polska",
-    zone: "Schengen",
-  },
-  {
     abbreviation: "PRG",
     expansion: "Praga",
     country: "Czechy",
@@ -679,6 +691,12 @@ export const DEST_KRK = [
     expansion: "Pescara",
     country: "Włochy",
     zone: "Schengen",
+  },
+  {
+    abbreviation: "RAK",
+    expansion: "Marrakesz",
+    country: "Maroko",
+    zone: "Non-Schengen",
   },
   {
     abbreviation: "RHO",
@@ -729,12 +747,6 @@ export const DEST_KRK = [
     zone: "Schengen",
   },
   {
-    abbreviation: "SZY",
-    expansion: "Olsztyn - Mazury",
-    country: "Polska",
-    zone: "Schengen",
-  },
-  {
     abbreviation: "SZZ",
     expansion: "Szczecin",
     country: "Polska",
@@ -750,7 +762,7 @@ export const DEST_KRK = [
     abbreviation: "TGD",
     expansion: "Podgorica",
     country: "Czarnogóra",
-    zone: "Schengen",
+    zone: "Non-Schengen",
   },
   {
     abbreviation: "TIA",
