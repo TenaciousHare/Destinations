@@ -1,8 +1,20 @@
 export const DEST_KTW = [
   {
+    abbreviation: "AAR",
+    expansion: "Aarhus",
+    country: "Dania",
+    zone: "Schengen",
+  },
+  {
     abbreviation: "ADB",
     expansion: "Izmir",
     country: "Turcja",
+    zone: "Non-Schengen",
+  },
+  {
+    abbreviation: "AGA",
+    expansion: "Agadir",
+    country: "Maroko",
     zone: "Non-Schengen",
   },
   {
@@ -102,12 +114,6 @@ export const DEST_KTW = [
     zone: "Non-Schengen",
   },
   {
-    abbreviation: "DTM",
-    expansion: "Dortmund",
-    country: "Niemcy",
-    zone: "Schengen",
-  },
-  {
     abbreviation: "DUB",
     expansion: "Dublin",
     country: "Irlandia",
@@ -168,6 +174,12 @@ export const DEST_KTW = [
     zone: "Schengen",
   },
   {
+    abbreviation: "KLX",
+    expansion: "Kalamata",
+    country: "Grecja",
+    zone: "Schengen",
+  },
+  {
     abbreviation: "KVA",
     expansion: "Kavala",
     country: "Grecja",
@@ -178,6 +190,12 @@ export const DEST_KTW = [
     expansion: "Larnaca",
     country: "Cypr",
     zone: "Non-Schengen",
+  },
+  {
+    abbreviation: "LEI",
+    expansion: "Almeria",
+    country: "Hiszpania",
+    zone: "Schengen",
   },
   {
     abbreviation: "MAH",
@@ -228,10 +246,22 @@ export const DEST_KTW = [
     zone: "Schengen",
   },
   {
+    abbreviation: "REG",
+    expansion: "Reggio Calabria",
+    country: "Włochy",
+    zone: "Schengen",
+  },
+  {
     abbreviation: "RHO",
     expansion: "Rodos",
     country: "Grecja",
     zone: "Schengen",
+  },
+  {
+    abbreviation: "RMF",
+    expansion: "Marsa Alam",
+    country: "Egipt",
+    zone: "Non-Schengen",
   },
   {
     abbreviation: "SKG",
@@ -244,6 +274,18 @@ export const DEST_KTW = [
     expansion: "Londyn Stansted",
     country: "Wielka Brytania",
     zone: "Non-Schengen",
+  },
+  {
+    abbreviation: "SUF",
+    expansion: "Lamezia Terme",
+    country: "Włochy",
+    zone: "Schengen",
+  },
+  {
+    abbreviation: "TSF",
+    expansion: "Teneryfa",
+    country: "Hiszpania",
+    zone: "Schengen",
   },
   {
     abbreviation: "TIA",
