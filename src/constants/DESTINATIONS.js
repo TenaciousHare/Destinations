@@ -760,7 +760,7 @@ export const DEST_KRK = [
   },
   {
     abbreviation: "SKG",
-    expansion: "Saloniki",
+    expansion: "Thessaloniki",
     country: "Grecja",
     zone: "Schengen",
   },
