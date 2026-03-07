@@ -282,7 +282,7 @@ export const DEST_KTW = [
     zone: "Schengen",
   },
   {
-    abbreviation: "TSF",
+    abbreviation: "TFS",
     expansion: "Teneryfa",
     country: "Hiszpania",
     zone: "Schengen",
