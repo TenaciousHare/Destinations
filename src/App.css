@@ -1,13 +1,13 @@
+/* --- GLOBALNE USTAWIENIA I RESET --- */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Roboto, sans-serif;
 }
+
 body {
-  zoom: 100%;
   height: 100vh;
-  font-family: sans-serif;
+  font-family: Roboto, sans-serif;
   color: black;
   background-color: white;
 }
@@ -17,23 +17,44 @@ body {
   size: a4 portrait;
 }
 
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.name {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 10mm;
-}
-
+/* --- UKŁADY GLOBALNE --- */
+.wrapper,
 .list {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.wrapper {
+  align-items: center;
+}
+
+/* --- ELEMENTY GLOBALNE (Formularze, Przyciski) --- */
+button,
+select {
+  background-color: royalblue;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 15px; /* Ujednolicony ładny padding */
+  color: white;
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled,
+select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* --- GENERATOR (WYDRUK I WIDOK) --- */
+.name {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10mm;
 }
 
 .page:first-of-type {
@@ -48,24 +69,155 @@ ul {
   list-style: square;
   font-size: 14px;
   margin: 5mm 10mm 10mm 10mm;
-  li {
-    line-height: 2rem;
-  }
 }
 
-button,
-select {
-  background-color: royalblue;
-  border: none;
-  border-radius: 5px;
-  padding: 5px;
-  margin: 10px;
-  color: white;
+ul li {
+  line-height: 2rem;
+}
+
+.loading-container {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-items: center;
 }
 
 @media print {
   button,
-  select {
-    display: none;
+  select,
+  .controls {
+    display: none !important;
   }
+}
+
+/* --- PANEL ADMINA --- */
+.admin-container {
+  padding: 20px;
+}
+
+/* Zgrupowane style dla nagłówków kontenerów */
+.admin-header,
+.table-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.admin-title,
+.table-title {
+  margin: 0;
+}
+
+.admin-user-info {
+  margin: 0;
+  color: gray;
+  font-size: 14px;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.add-form-container {
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.add-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.add-form input {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.filter-label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+/* --- MODYFIKATORY PRZYCISKÓW --- */
+.btn-success {
+  background-color: #4caf50;
+}
+
+.btn-danger {
+  background-color: #f44336;
+}
+
+/* --- TABELA ADMINA --- */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.admin-table thead {
+  background-color: #f2f2f2;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+
+.admin-table th {
+  cursor: pointer;
+  user-select: none;
+}
+
+.zone-schengen {
+  color: blue;
+}
+
+.zone-non-schengen {
+  color: red;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 20px;
+}
+
+/* --- LOGOWANIE --- */
+.login-container {
+  max-width: 400px;
+  margin: 50px auto;
+  text-align: center;
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 10px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.login-input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.btn-login {
+  padding: 10px;
 }
