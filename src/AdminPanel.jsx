@@ -162,6 +162,9 @@ const AdminPanel = () => {
           <Link to="/">
             <button className="btn-nav">Generator Testów</button>
           </Link>
+          <Link to="/admin/print">
+            <button className="btn-success">Generator Tabel do Wydruku</button>
+          </Link>
           <button onClick={() => signOut(auth)} className="btn-nav">
             Wyloguj
           </button>

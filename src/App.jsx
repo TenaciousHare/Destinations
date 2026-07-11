@@ -3,7 +3,8 @@ import { AuthProvider } from "./AuthContext";
 import ProtectedRoute from "./ProtectedRoute";
 import Login from "./Login";
 import AdminPanel from "./AdminPanel";
-import Generator from "./Generator"; // Twój główny widok
+import Generator from "./Generator";
+import PrintTables from "./PrintTables";
 
 function App() {
   return (
@@ -17,13 +18,21 @@ function App() {
           <Route path="/login" element={<Login />} />
 
           {/* Chroniona ścieżka do panelu zarządzania bazą */}
-          <Route 
-            path="/admin" 
+          <Route
+            path="/admin"
             element={
               <ProtectedRoute>
                 <AdminPanel />
               </ProtectedRoute>
-            } 
+            }
+          />
+          <Route
+            path="/admin/print"
+            element={
+              <ProtectedRoute>
+                <PrintTables />
+              </ProtectedRoute>
+            }
           />
         </Routes>
       </Router>

@@ -34,14 +34,20 @@ button,
 select {
   background-color: royalblue;
   border: none;
-  border-radius: 5px;
-  padding: 5px 15px; /* Ujednolicony ładny padding */
+  border-radius: 6px;
+  padding: 8px 16px; /* Zwiększony padding dla wygody */
   color: white;
   font-family: inherit;
+  font-size: 14px; /* Opcjonalnie: nieco większa czcionka dla czytelności */
+  transition: background-color 0.2s ease; /* Płynna zmiana koloru przy najechaniu */
 }
 
 button {
   cursor: pointer;
+}
+
+button:hover {
+  filter: brightness(1.1); /* Subtelny efekt podświetlenia po najechaniu */
 }
 
 button:disabled,
@@ -80,7 +86,9 @@ ul li {
   margin-top: 50px;
 }
 
-.controls {
+.controls,
+.admin-actions,
+.print-header {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
@@ -104,9 +112,15 @@ ul li {
 .admin-header,
 .table-controls {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+}
+
+.admin-header {
+  justify-content: space-between;
+}
+.table-controls {
+  justify-content: center;
 }
 
 .admin-title,
@@ -118,11 +132,6 @@ ul li {
   margin: 0;
   color: gray;
   font-size: 14px;
-}
-
-.admin-actions {
-  display: flex;
-  gap: 10px;
 }
 
 .add-form-container {
@@ -220,4 +229,56 @@ ul li {
 
 .btn-login {
   padding: 10px;
+}
+/* --- ZAAWANSOWANE STYLE WYDRUKU I WIDOKU --- */
+
+/* Ograniczenie szerokości całej strony wydruku na ekranie */
+.print-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Wymuszenie nowej strony i centrowanie na papierze */
+.schengen-container,
+.non-schengen-container {
+  break-after: page;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+/* Centrowanie tabeli na ekranie */
+.admin-table {
+  max-width: 600px; /* Nie będzie zajmować całego ekranu */
+  margin: 0 auto; /* Wyśrodkowanie tabeli */
+  width: 100%;
+}
+
+/* Kompaktowa wersja tabeli */
+.compact-table th,
+.compact-table td {
+  padding: 6px 10px !important;
+  font-size: 12px;
+}
+
+@media print {
+  .print-header {
+    display: none !important;
+  }
+
+  /* W druku ustawiamy 50% szerokości, jak chciałeś */
+  .admin-table {
+    width: 50% !important;
+    margin: 0 auto 20px auto;
+  }
+
+  .compact-table th,
+  .compact-table td {
+    font-size: 10px; /* Jeszcze mniejsza czcionka na papierze */
+    padding: 3px 5px !important;
+  }
+
+  tr {
+    break-inside: avoid;
+  }
 }
