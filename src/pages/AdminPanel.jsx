@@ -9,7 +9,7 @@ import {
 } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { Link } from "react-router-dom";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
 const AdminPanel = () => {
   const { currentUser } = useAuth();

@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { db } from "../services/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { Link } from "react-router-dom";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
 const PrintTables = () => {
   const { currentUser } = useAuth();
