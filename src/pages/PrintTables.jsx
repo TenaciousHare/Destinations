@@ -1,15 +1,14 @@
 import { useState, useEffect, useMemo } from "react";
-import { db } from "./firebase";
+import { db } from "../services/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { Link } from "react-router-dom";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../AuthContext";
 
 const PrintTables = () => {
   const { currentUser } = useAuth();
   const [destinations, setDestinations] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Musimy mieć te same stałe co w AdminPanel
   const KRK_USER_EMAIL = "krk@admin.com";
   const KTW_USER_EMAIL = "ktw@admin.com";
 
@@ -60,7 +59,6 @@ const PrintTables = () => {
         </button>
       </header>
 
-      {/* Używamy klas, które zdefiniowaliśmy w CSS */}
       <div className="schengen-container">
         <h3>Strefa Schengen</h3>
         <table className="admin-table compact-table">

@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { db } from "./firebase";
+import { db } from "../services/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { Link } from "react-router-dom";
-import { useAuth } from "./AuthContext";
-import "./App.css";
+import { useAuth } from "../AuthContext";
+import "../App.css";
 
 const Generator = () => {
-  const { currentUser } = useAuth(); // POBIERAMY STATUS LOGOWANIA
+  const { currentUser } = useAuth();
 
   const [destinations, setDestinations] = useState({ KTW: [], KRK: [] });
   const [selectedAirport, setSelectedAirport] = useState("KTW");
@@ -14,7 +14,6 @@ const Generator = () => {
   const [exp, setExp] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Pobieranie danych z Firestore przy uruchomieniu aplikacji
   useEffect(() => {
     const fetchData = async () => {
       const querySnapshot = await getDocs(collection(db, "destinations"));
@@ -29,7 +28,6 @@ const Generator = () => {
     fetchData();
   }, []);
 
-  // Po załadowaniu danych generujemy początkowy test
   useEffect(() => {
     if (!loading) {
       handleGenerate();
@@ -75,7 +73,6 @@ const Generator = () => {
         <button onClick={() => window.print()}>DRUKUJ</button>
         <button onClick={handleGenerate}>GENERUJ</button>
 
-        {/* NOWA NAWIGACJA */}
         {currentUser ? (
           <Link to="/admin">
             <button className="btn-success">Panel Admina</button>

@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { db, auth } from "./firebase";
+import { db, auth } from "../services/firebase";
 import {
   collection,
   addDoc,
@@ -9,16 +9,14 @@ import {
 } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { Link } from "react-router-dom";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../AuthContext";
 
 const AdminPanel = () => {
   const { currentUser } = useAuth();
 
-  // ZDEFINIOWANE KONTA DLA PRACOWNIKÓW
   const KRK_USER_EMAIL = "krk@admin.com";
   const KTW_USER_EMAIL = "ktw@admin.com";
 
-  // LOGIKA SPRAWDZAJĄCA UPRAWNIENIA
   const isKrkUser = currentUser?.email === KRK_USER_EMAIL;
   const isKtwUser = currentUser?.email === KTW_USER_EMAIL;
   const isRestrictedUser = isKrkUser || isKtwUser; // True, jeśli to KRK lub KTW
@@ -40,7 +38,7 @@ const AdminPanel = () => {
     expansion: "",
     country: "",
     zone: "Schengen",
-    // Domyślna wartość w formularzu również dostosowuje się do pracownika
+
     airport: isKrkUser ? "KRK" : isKtwUser ? "KTW" : "KTW",
   });
 
@@ -62,7 +60,6 @@ const AdminPanel = () => {
     e.preventDefault();
     await addDoc(collection(db, "destinations"), formData);
 
-    // Czyszczenie formularza z zachowaniem uprawnień
     setFormData({
       abbreviation: "",
       expansion: "",
@@ -217,7 +214,7 @@ const AdminPanel = () => {
             onChange={(e) =>
               setFormData({ ...formData, airport: e.target.value })
             }
-            disabled={isRestrictedUser} // Blokujemy wybór dla pracowników KTW oraz KRK
+            disabled={isRestrictedUser}
             title={
               isRestrictedUser ? "Nie możesz zmienić lotniska startowego" : ""
             }
@@ -237,7 +234,6 @@ const AdminPanel = () => {
           Lista destynacji w bazie ({sortedDestinations.length})
         </h3>
 
-        {/* Filtr tabeli jest widoczny tylko dla głównego admina */}
         {!isRestrictedUser && (
           <div>
             <label className="filter-label">Filtruj tabelę:</label>
@@ -277,7 +273,6 @@ const AdminPanel = () => {
         </thead>
         <tbody>
           {sortedDestinations.map((dest) => {
-            // Zabezpieczenie na poziomie wiersza: czy użytkownik ma prawo usunąć dany wpis?
             const canDelete =
               !isRestrictedUser ||
               (isKrkUser && dest.airport === "KRK") ||

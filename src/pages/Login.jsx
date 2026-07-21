@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "./firebase";
+import { auth } from "../services/firebase";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -11,11 +11,11 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError(""); // Czyścimy błędy przed nową próbą
+    setError("");
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      // Jeśli logowanie się uda, przenosimy użytkownika do panelu admina
+
       navigate("/admin");
     } catch (err) {
       console.error(err);
