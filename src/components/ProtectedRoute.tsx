@@ -1,15 +1,14 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import type { ReactNode } from "react";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   const { currentUser } = useAuth();
 
-  // Jeśli nie ma zalogowanego użytkownika, przekieruj na /login
   if (!currentUser) {
     return <Navigate to="/login" replace />;
   }
 
-  // Jeśli jest zalogowany, wyrenderuj to, co jest w środku (czyli panel admina)
   return children;
 };
 

@@ -10,6 +10,10 @@ import {
 import { signOut } from "firebase/auth";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import type { Airport, Zone, Destination, DestinationWithId } from "../types";
+
+type SortKey = keyof Destination;
+type FilterAirport = Airport | "ALL";
 
 const AdminPanel = () => {
   const { currentUser } = useAuth();
@@ -19,26 +23,26 @@ const AdminPanel = () => {
 
   const isKrkUser = currentUser?.email === KRK_USER_EMAIL;
   const isKtwUser = currentUser?.email === KTW_USER_EMAIL;
-  const isRestrictedUser = isKrkUser || isKtwUser; // True, jeśli to KRK lub KTW
+  const isRestrictedUser = isKrkUser || isKtwUser;
 
-  const [destinations, setDestinations] = useState([]);
+  const [destinations, setDestinations] = useState<DestinationWithId[]>([]);
 
-  // Domyślny filtr: Jeśli to KRK to "KRK", jeśli KTW to "KTW", w przeciwnym razie główny admin widzi "ALL"
-  const [filterAirport, setFilterAirport] = useState(
+  const [filterAirport, setFilterAirport] = useState<FilterAirport>(
     isKrkUser ? "KRK" : isKtwUser ? "KTW" : "ALL",
   );
 
-  const [sortConfig, setSortConfig] = useState({
-    key: "country",
-    direction: "ascending",
-  });
+  type SortDirection = "ascending" | "descending";
 
-  const [formData, setFormData] = useState({
+  const [sortConfig, setSortConfig] = useState<{
+    key: SortKey;
+    direction: SortDirection;
+  }>({ key: "country", direction: "ascending" });
+
+  const [formData, setFormData] = useState<Destination>({
     abbreviation: "",
     expansion: "",
     country: "",
     zone: "Schengen",
-
     airport: isKrkUser ? "KRK" : isKtwUser ? "KTW" : "KTW",
   });
 
@@ -48,7 +52,7 @@ const AdminPanel = () => {
       (snapshot) => {
         const data = snapshot.docs.map((doc) => ({
           id: doc.id,
-          ...doc.data(),
+          ...(doc.data() as Destination),
         }));
         setDestinations(data);
       },
@@ -56,10 +60,9 @@ const AdminPanel = () => {
     return () => unsubscribe();
   }, []);
 
-  const handleAdd = async (e) => {
+  const handleAdd = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await addDoc(collection(db, "destinations"), formData);
-
     setFormData({
       abbreviation: "",
       expansion: "",
@@ -75,7 +78,7 @@ const AdminPanel = () => {
     });
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: string) => {
     if (window.confirm("Na pewno usunąć ten wpis?")) {
       await deleteDoc(doc(db, "destinations", id));
     }
@@ -129,15 +132,15 @@ const AdminPanel = () => {
     return sortableItems;
   }, [displayedDestinations, sortConfig]);
 
-  const requestSort = (key) => {
-    let direction = "ascending";
+  const requestSort = (key: SortKey) => {
+    let direction: SortDirection = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
       direction = "descending";
     }
     setSortConfig({ key, direction });
   };
 
-  const getSortIndicator = (key) => {
+  const getSortIndicator = (key: SortKey) => {
     if (sortConfig.key === key) {
       return sortConfig.direction === "ascending" ? " 🔼" : " 🔽";
     }
@@ -203,7 +206,9 @@ const AdminPanel = () => {
           />
           <select
             value={formData.zone}
-            onChange={(e) => setFormData({ ...formData, zone: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, zone: e.target.value as Zone })
+            }
             className="form-select"
           >
             <option value="Schengen">Schengen</option>
@@ -212,7 +217,7 @@ const AdminPanel = () => {
           <select
             value={formData.airport}
             onChange={(e) =>
-              setFormData({ ...formData, airport: e.target.value })
+              setFormData({ ...formData, airport: e.target.value as Airport })
             }
             disabled={isRestrictedUser}
             title={
@@ -239,7 +244,9 @@ const AdminPanel = () => {
             <label className="filter-label">Filtruj tabelę:</label>
             <select
               value={filterAirport}
-              onChange={(e) => setFilterAirport(e.target.value)}
+              onChange={(e) =>
+                setFilterAirport(e.target.value as FilterAirport)
+              }
               className="filter-select"
             >
               <option value="ALL">Wszystkie lotniska</option>
@@ -313,7 +320,7 @@ const AdminPanel = () => {
 
           {sortedDestinations.length === 0 && (
             <tr>
-              <td colSpan="6" className="empty-state">
+              <td colSpan={6} className="empty-state">
                 Brak danych do wyświetlenia.
               </td>
             </tr>

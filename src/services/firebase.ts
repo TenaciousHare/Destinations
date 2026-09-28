@@ -12,10 +12,7 @@ const firebaseConfig = {
   measurementId: "G-1ZH1PWXT2Y",
 };
 
-// Inicjalizacja aplikacji Firebase
 const app = initializeApp(firebaseConfig);
 
-// Eksportujemy usługi Authentication oraz bazy danych Firestore,
-// żeby korzystać z nich w innych plikach (np. w formularzu logowania)
 export const auth = getAuth(app);
 export const db = getFirestore(app);

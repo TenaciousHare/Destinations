@@ -9,13 +9,11 @@ const Login = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
-
     try {
       await signInWithEmailAndPassword(auth, email, password);
-
       navigate("/admin");
     } catch (err) {
       console.error(err);
@@ -26,9 +24,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <h2>Zaloguj się do panelu</h2>
-
       {error && <p className="error-message">{error}</p>}
-
       <form onSubmit={handleLogin} className="login-form">
         <input
           type="email"

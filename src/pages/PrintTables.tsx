@@ -3,10 +3,11 @@ import { db } from "../services/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import type { Destination, DestinationWithId } from "../types";
 
 const PrintTables = () => {
   const { currentUser } = useAuth();
-  const [destinations, setDestinations] = useState([]);
+  const [destinations, setDestinations] = useState<DestinationWithId[]>([]);
   const [loading, setLoading] = useState(true);
 
   const KRK_USER_EMAIL = "krk@admin.com";
@@ -17,7 +18,7 @@ const PrintTables = () => {
       const querySnapshot = await getDocs(collection(db, "destinations"));
       const data = querySnapshot.docs.map((doc) => ({
         id: doc.id,
-        ...doc.data(),
+        ...(doc.data() as Destination),
       }));
       setDestinations(data);
       setLoading(false);
@@ -26,7 +27,6 @@ const PrintTables = () => {
   }, []);
 
   const { schengen, nonSchengen } = useMemo(() => {
-    // 1. Filtrowanie w zależności od użytkownika
     let filtered = destinations;
     if (currentUser?.email === KRK_USER_EMAIL) {
       filtered = destinations.filter((d) => d.airport === "KRK");
@@ -34,7 +34,6 @@ const PrintTables = () => {
       filtered = destinations.filter((d) => d.airport === "KTW");
     }
 
-    // 2. Sortowanie alfabetyczne krajów
     const sorted = [...filtered].sort((a, b) =>
       a.country.localeCompare(b.country),
     );
@@ -105,4 +104,5 @@ const PrintTables = () => {
     </div>
   );
 };
+
 export default PrintTables;
