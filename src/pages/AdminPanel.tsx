@@ -9,7 +9,7 @@ import {
 } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { Link } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/useAuth";
 import type { Airport, Zone, Destination, DestinationWithId } from "../types";
 
 type SortKey = keyof Destination;
@@ -90,7 +90,7 @@ const AdminPanel = () => {
   });
 
   const sortedDestinations = useMemo(() => {
-    let sortableItems = [...displayedDestinations];
+    const sortableItems = [...displayedDestinations];
 
     if (sortConfig.key !== null) {
       sortableItems.sort((a, b) => {
@@ -121,8 +121,8 @@ const AdminPanel = () => {
           return 0;
         }
 
-        let aValue = (a[sortConfig.key] || "").toString().toLowerCase();
-        let bValue = (b[sortConfig.key] || "").toString().toLowerCase();
+        const aValue = (a[sortConfig.key] || "").toString().toLowerCase();
+        const bValue = (b[sortConfig.key] || "").toString().toLowerCase();
 
         if (aValue < bValue) return -1 * dir;
         if (aValue > bValue) return 1 * dir;
