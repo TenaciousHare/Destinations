@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pobierz kod
+        uses: actions/checkout@v4
+
+      - name: Ustaw Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: npm
+
+      - name: Zainstaluj zależności
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Testy
+        run: npm run test:run
+
+      - name: Build
+        run: npm run build
