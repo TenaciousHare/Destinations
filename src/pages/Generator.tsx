@@ -4,6 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/useAuth";
 import type { Airport, Destination } from "../types";
+import { losoweWartosci } from "../utils/random";
 import "../App.css";
 
 const Generator = () => {
@@ -38,30 +39,9 @@ const Generator = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, selectedAirport]);
 
-  function losoweWartosci(
-    lotnisko: Airport,
-    ilosc: number,
-    klucz: keyof Destination,
-  ): string[] {
-    const tablica = destinations[lotnisko];
-    if (!tablica || !tablica.length || ilosc <= 0) return [];
-
-    const wylosowaneWartosci: string[] = [];
-    const pomocniczaTablica = [...tablica];
-
-    for (let i = 0; i < ilosc; i++) {
-      if (pomocniczaTablica.length === 0) break;
-      const losowyIndeks = Math.floor(Math.random() * pomocniczaTablica.length);
-      const wartosc = pomocniczaTablica[losowyIndeks][klucz];
-      wylosowaneWartosci.push(wartosc);
-      pomocniczaTablica.splice(losowyIndeks, 1);
-    }
-    return wylosowaneWartosci;
-  }
-
   function handleGenerate() {
-    setAbbr(losoweWartosci(selectedAirport, 20, "abbreviation"));
-    setExp(losoweWartosci(selectedAirport, 20, "expansion"));
+    setAbbr(losoweWartosci(destinations[selectedAirport], 20, "abbreviation"));
+    setExp(losoweWartosci(destinations[selectedAirport], 20, "expansion"));
   }
 
   if (loading) {
