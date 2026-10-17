@@ -11,6 +11,7 @@ import { signOut } from "firebase/auth";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/useAuth";
 import type { Airport, Zone, Destination, DestinationWithId } from "../types";
+import { compareText } from "../utils/sort";
 
 type SortKey = keyof Destination;
 type FilterAirport = Airport | "ALL";
@@ -26,6 +27,7 @@ const AdminPanel = () => {
   const isRestrictedUser = isKrkUser || isKtwUser;
 
   const [destinations, setDestinations] = useState<DestinationWithId[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   const [filterAirport, setFilterAirport] = useState<FilterAirport>(
     isKrkUser ? "KRK" : isKtwUser ? "KTW" : "ALL",
@@ -56,82 +58,75 @@ const AdminPanel = () => {
         }));
         setDestinations(data);
       },
+      (err) => {
+        console.error(err);
+        setError("Nie udało się pobrać listy destynacji.");
+      },
     );
     return () => unsubscribe();
   }, []);
 
   const handleAdd = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await addDoc(collection(db, "destinations"), formData);
-    setFormData({
-      abbreviation: "",
-      expansion: "",
-      country: "",
-      zone: "Schengen",
-      airport: isKrkUser
-        ? "KRK"
-        : isKtwUser
-          ? "KTW"
-          : filterAirport !== "ALL"
-            ? filterAirport
-            : "KTW",
-    });
+    setError(null);
+    try {
+      await addDoc(collection(db, "destinations"), formData);
+      setFormData({
+        abbreviation: "",
+        expansion: "",
+        country: "",
+        zone: "Schengen",
+        airport: isKrkUser
+          ? "KRK"
+          : isKtwUser
+            ? "KTW"
+            : filterAirport !== "ALL"
+              ? filterAirport
+              : "KTW",
+      });
+    } catch (err) {
+      console.error(err);
+      setError("Nie udało się dodać destynacji. Spróbuj ponownie.");
+    }
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm("Na pewno usunąć ten wpis?")) {
+    if (!window.confirm("Na pewno usunąć ten wpis?")) return;
+    setError(null);
+    try {
       await deleteDoc(doc(db, "destinations", id));
+    } catch (err) {
+      console.error(err);
+      setError("Nie udało się usunąć wpisu. Spróbuj ponownie.");
     }
   };
 
-  const displayedDestinations = destinations.filter((dest) => {
-    if (filterAirport === "ALL") return true;
-    return dest.airport === filterAirport;
-  });
-
   const sortedDestinations = useMemo(() => {
-    const sortableItems = [...displayedDestinations];
+    const dir = sortConfig.direction === "ascending" ? 1 : -1;
 
-    if (sortConfig.key !== null) {
-      sortableItems.sort((a, b) => {
-        const dir = sortConfig.direction === "ascending" ? 1 : -1;
-
+    // filter() zwraca nową tablicę, więc sort() nie modyfikuje stanu
+    return destinations
+      .filter((d) => filterAirport === "ALL" || d.airport === filterAirport)
+      .sort((a, b) => {
         if (sortConfig.key === "country" || sortConfig.key === "zone") {
           const zoneA = a.zone === "Schengen" ? 0 : 1;
           const zoneB = b.zone === "Schengen" ? 0 : 1;
+          if (zoneA !== zoneB) return (zoneA - zoneB) * dir;
 
-          if (zoneA !== zoneB) {
-            return (zoneA - zoneB) * dir;
-          }
+          const countryDiff = compareText(a.country, b.country);
+          if (countryDiff !== 0) return countryDiff * dir;
 
-          const countryA = (a.country || "").toLowerCase();
-          const countryB = (b.country || "").toLowerCase();
-
-          if (countryA !== countryB) {
-            return countryA < countryB ? -1 * dir : 1 * dir;
-          }
-
-          const cityA = (a.expansion || "").toLowerCase();
-          const cityB = (b.expansion || "").toLowerCase();
-
-          if (cityA !== cityB) {
-            return cityA < cityB ? -1 * dir : 1 * dir;
-          }
-
-          return 0;
+          return compareText(a.expansion, b.expansion) * dir;
         }
 
-        const aValue = (a[sortConfig.key] || "").toString().toLowerCase();
-        const bValue = (b[sortConfig.key] || "").toString().toLowerCase();
-
-        if (aValue < bValue) return -1 * dir;
-        if (aValue > bValue) return 1 * dir;
-        return 0;
+        return (
+          compareText(
+            (a[sortConfig.key] || "").toString(),
+            (b[sortConfig.key] || "").toString(),
+          ) * dir
+        );
       });
-    }
-    return sortableItems;
-  }, [displayedDestinations, sortConfig]);
-
+  }, [destinations, filterAirport, sortConfig]);
   const requestSort = (key: SortKey) => {
     let direction: SortDirection = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
@@ -233,7 +228,7 @@ const AdminPanel = () => {
           </button>
         </form>
       </div>
-
+      {error && <p className="error-message">{error}</p>}
       <div className="table-controls">
         <h3 className="table-title">
           Lista destynacji w bazie ({sortedDestinations.length})

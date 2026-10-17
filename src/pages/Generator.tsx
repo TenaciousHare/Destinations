@@ -19,15 +19,22 @@ const Generator = () => {
   const [abbr, setAbbr] = useState<string[]>([]);
   const [exp, setExp] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      const querySnapshot = await getDocs(collection(db, "destinations"));
-      const data = querySnapshot.docs.map((doc) => doc.data() as Destination);
-      const ktw = data.filter((d) => d.airport === "KTW");
-      const krk = data.filter((d) => d.airport === "KRK");
-      setDestinations({ KTW: ktw, KRK: krk });
-      setLoading(false);
+      try {
+        const querySnapshot = await getDocs(collection(db, "destinations"));
+        const data = querySnapshot.docs.map((doc) => doc.data() as Destination);
+        const ktw = data.filter((d) => d.airport === "KTW");
+        const krk = data.filter((d) => d.airport === "KRK");
+        setDestinations({ KTW: ktw, KRK: krk });
+      } catch (err) {
+        console.error(err);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchData();
   }, []);
@@ -46,6 +53,17 @@ const Generator = () => {
 
   if (loading) {
     return <div className="loading-container">Ładowanie danych z bazy...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="loading-container">
+        <p className="error-message">
+          Nie udało się pobrać danych z bazy. Odśwież stronę lub spróbuj
+          ponownie później.
+        </p>
+      </div>
+    );
   }
 
   return (

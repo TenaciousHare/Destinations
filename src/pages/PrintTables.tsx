@@ -4,24 +4,32 @@ import { collection, getDocs } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/useAuth";
 import type { Destination, DestinationWithId } from "../types";
+import { compareByCountryThenCity } from "../utils/sort";
 
 const PrintTables = () => {
   const { currentUser } = useAuth();
   const [destinations, setDestinations] = useState<DestinationWithId[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const KRK_USER_EMAIL = "krk@admin.com";
   const KTW_USER_EMAIL = "ktw@admin.com";
 
   useEffect(() => {
     const fetchData = async () => {
-      const querySnapshot = await getDocs(collection(db, "destinations"));
-      const data = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...(doc.data() as Destination),
-      }));
-      setDestinations(data);
-      setLoading(false);
+      try {
+        const querySnapshot = await getDocs(collection(db, "destinations"));
+        const data = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...(doc.data() as Destination),
+        }));
+        setDestinations(data);
+      } catch (err) {
+        console.error(err);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchData();
   }, []);
@@ -34,9 +42,7 @@ const PrintTables = () => {
       filtered = destinations.filter((d) => d.airport === "KTW");
     }
 
-    const sorted = [...filtered].sort((a, b) =>
-      a.country.localeCompare(b.country),
-    );
+    const sorted = [...filtered].sort(compareByCountryThenCity);
 
     return {
       schengen: sorted.filter((d) => d.zone === "Schengen"),
@@ -46,6 +52,18 @@ const PrintTables = () => {
 
   if (loading)
     return <div className="admin-container">Ładowanie danych...</div>;
+
+  if (error)
+    return (
+      <div className="admin-container">
+        <p className="error-message">
+          Nie udało się pobrać danych z bazy. Spróbuj ponownie później.
+        </p>
+        <Link to="/admin">
+          <button className="btn-nav">Wróć do Panelu</button>
+        </Link>
+      </div>
+    );
 
   return (
     <div className="print-page">
