@@ -25,3 +25,12 @@ dist-ssr
 
 # TypeScript build cache
 *.tsbuildinfo
+
+# Firebase – sekrety i artefakty lokalne
+serviceAccountKey.json      # klucz Admin SDK = pełny dostęp do projektu, NIGDY
+*-service-account*.json
+.firebase/                  # lokalny cache deploy/emulatorów
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+.runtimeconfig.json         # sekrety Cloud Functions, jeśli kiedyś dojdą

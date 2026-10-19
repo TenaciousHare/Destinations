@@ -14,6 +14,7 @@ const PrintTables = () => {
 
   const KRK_USER_EMAIL = "krk@admin.com";
   const KTW_USER_EMAIL = "ktw@admin.com";
+  const LS_USER_EMAIL = "ls@admin.com";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,6 +41,8 @@ const PrintTables = () => {
       filtered = destinations.filter((d) => d.airport === "KRK");
     } else if (currentUser?.email === KTW_USER_EMAIL) {
       filtered = destinations.filter((d) => d.airport === "KTW");
+    } else if (currentUser?.email === LS_USER_EMAIL) {
+      filtered = destinations.filter((d) => d.airport === "LS");
     }
 
     const sorted = [...filtered].sort(compareByCountryThenCity);

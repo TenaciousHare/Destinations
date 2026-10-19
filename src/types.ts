@@ -1,4 +1,4 @@
-export type Airport = "KTW" | "KRK";
+export type Airport = "KTW" | "KRK" | "LS";
 export type Zone = "Schengen" | "Non-Schengen";
 
 export interface Destination {

@@ -21,16 +21,18 @@ const AdminPanel = () => {
 
   const KRK_USER_EMAIL = "krk@admin.com";
   const KTW_USER_EMAIL = "ktw@admin.com";
+  const LS_USER_EMAIL = "ls@admin.com";
 
   const isKrkUser = currentUser?.email === KRK_USER_EMAIL;
   const isKtwUser = currentUser?.email === KTW_USER_EMAIL;
-  const isRestrictedUser = isKrkUser || isKtwUser;
+  const isLsUser = currentUser?.email === LS_USER_EMAIL;
+  const isRestrictedUser = isKrkUser || isKtwUser || isLsUser;
 
   const [destinations, setDestinations] = useState<DestinationWithId[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const [filterAirport, setFilterAirport] = useState<FilterAirport>(
-    isKrkUser ? "KRK" : isKtwUser ? "KTW" : "ALL",
+    isKrkUser ? "KRK" : isKtwUser ? "KTW" : isLsUser ? "LS" : "ALL",
   );
 
   type SortDirection = "ascending" | "descending";
@@ -45,7 +47,7 @@ const AdminPanel = () => {
     expansion: "",
     country: "",
     zone: "Schengen",
-    airport: isKrkUser ? "KRK" : isKtwUser ? "KTW" : "KTW",
+    airport: isKrkUser ? "KRK" : isKtwUser ? "KTW" : isLsUser ? "LS" : "KTW",
   });
 
   useEffect(() => {
@@ -80,9 +82,11 @@ const AdminPanel = () => {
           ? "KRK"
           : isKtwUser
             ? "KTW"
-            : filterAirport !== "ALL"
-              ? filterAirport
-              : "KTW",
+            : isLsUser
+              ? "LS"
+              : filterAirport !== "ALL"
+                ? filterAirport
+                : "KTW",
       });
     } catch (err) {
       console.error(err);
@@ -151,6 +155,7 @@ const AdminPanel = () => {
             Zalogowano jako: <strong>{currentUser?.email}</strong>{" "}
             {isKrkUser && "(Ograniczony dostęp: Tylko KRK)"}
             {isKtwUser && "(Ograniczony dostęp: Tylko KTW)"}
+            {isLsUser && "(Ograniczony dostęp: Tylko LS)"}
           </p>
         </div>
         <div className="admin-actions">
@@ -222,6 +227,7 @@ const AdminPanel = () => {
           >
             <option value="KTW">KTW</option>
             <option value="KRK">KRK</option>
+            <option value="LS">LS</option>
           </select>
           <button type="submit" className="btn-success">
             Dodaj wpis
@@ -247,6 +253,7 @@ const AdminPanel = () => {
               <option value="ALL">Wszystkie lotniska</option>
               <option value="KTW">Tylko KTW</option>
               <option value="KRK">Tylko KRK</option>
+              <option value="LS">Tylko LS</option>
             </select>
           </div>
         )}
@@ -278,7 +285,8 @@ const AdminPanel = () => {
             const canDelete =
               !isRestrictedUser ||
               (isKrkUser && dest.airport === "KRK") ||
-              (isKtwUser && dest.airport === "KTW");
+              (isKtwUser && dest.airport === "KTW") ||
+              (isLsUser && dest.airport === "LS");
 
             return (
               <tr key={dest.id}>

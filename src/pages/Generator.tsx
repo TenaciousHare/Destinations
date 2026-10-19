@@ -14,6 +14,7 @@ const Generator = () => {
   >({
     KTW: [],
     KRK: [],
+    LS: [],
   });
   const [selectedAirport, setSelectedAirport] = useState<Airport>("KTW");
   const [abbr, setAbbr] = useState<string[]>([]);
@@ -28,7 +29,8 @@ const Generator = () => {
         const data = querySnapshot.docs.map((doc) => doc.data() as Destination);
         const ktw = data.filter((d) => d.airport === "KTW");
         const krk = data.filter((d) => d.airport === "KRK");
-        setDestinations({ KTW: ktw, KRK: krk });
+        const ls = data.filter((d) => d.airport === "LS");
+        setDestinations({ KTW: ktw, KRK: krk, LS: ls });
       } catch (err) {
         console.error(err);
         setError(true);
@@ -75,6 +77,7 @@ const Generator = () => {
         >
           <option value="KTW">KTW</option>
           <option value="KRK">KRK</option>
+          <option value="LS">LS</option>
         </select>
         <button onClick={() => window.print()}>DRUKUJ</button>
         <button onClick={handleGenerate}>GENERUJ</button>
