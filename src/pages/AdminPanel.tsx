@@ -6,6 +6,8 @@ import {
   deleteDoc,
   doc,
   onSnapshot,
+  query,
+  where,
 } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { Link } from "react-router-dom";
@@ -27,6 +29,13 @@ const AdminPanel = () => {
   const isKtwUser = currentUser?.email === KTW_USER_EMAIL;
   const isLsUser = currentUser?.email === LS_USER_EMAIL;
   const isRestrictedUser = isKrkUser || isKtwUser || isLsUser;
+  const restrictedAirport: Airport | null = isKrkUser
+    ? "KRK"
+    : isKtwUser
+      ? "KTW"
+      : isLsUser
+        ? "LS"
+        : null;
 
   const [destinations, setDestinations] = useState<DestinationWithId[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -51,8 +60,13 @@ const AdminPanel = () => {
   });
 
   useEffect(() => {
+    const ref = collection(db, "destinations");
+    const q = restrictedAirport
+      ? query(ref, where("airport", "==", restrictedAirport))
+      : ref;
+
     const unsubscribe = onSnapshot(
-      collection(db, "destinations"),
+      q,
       (snapshot) => {
         const data = snapshot.docs.map((doc) => ({
           id: doc.id,
@@ -66,27 +80,24 @@ const AdminPanel = () => {
       },
     );
     return () => unsubscribe();
-  }, []);
+  }, [restrictedAirport]); // <-- przelicza się, gdy auth się ustali
 
   const handleAdd = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     try {
-      await addDoc(collection(db, "destinations"), formData);
+      await addDoc(collection(db, "destinations"), {
+        ...formData,
+        airport: restrictedAirport ?? formData.airport,
+      });
       setFormData({
         abbreviation: "",
         expansion: "",
         country: "",
         zone: "Schengen",
-        airport: isKrkUser
-          ? "KRK"
-          : isKtwUser
-            ? "KTW"
-            : isLsUser
-              ? "LS"
-              : filterAirport !== "ALL"
-                ? filterAirport
-                : "KTW",
+        airport:
+          restrictedAirport ??
+          (filterAirport !== "ALL" ? filterAirport : "KTW"),
       });
     } catch (err) {
       console.error(err);
@@ -215,7 +226,7 @@ const AdminPanel = () => {
             <option value="Non-Schengen">Non-Schengen</option>
           </select>
           <select
-            value={formData.airport}
+            value={restrictedAirport ?? formData.airport}
             onChange={(e) =>
               setFormData({ ...formData, airport: e.target.value as Airport })
             }
