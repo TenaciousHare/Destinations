@@ -185,7 +185,7 @@ ul li {
   border: 1px solid #ccc;
 }
 
-.admin-table th {
+.admin-table:not(.compact-table) thead th {
   cursor: pointer;
   user-select: none;
 }
@@ -252,6 +252,11 @@ ul li {
   max-width: 600px; /* Nie będzie zajmować całego ekranu */
   margin: 0 auto; /* Wyśrodkowanie tabeli */
   width: 100%;
+}
+
+.compact-table caption {
+  font-weight: bold;
+  font-size: 1.17em;
 }
 
 /* Kompaktowa wersja tabeli */

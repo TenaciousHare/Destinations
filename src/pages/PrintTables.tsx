@@ -80,19 +80,19 @@ const PrintTables = () => {
       </header>
 
       <div className="schengen-container">
-        <h3>Strefa Schengen</h3>
         <table className="admin-table compact-table">
+          <caption>Strefa Schengen</caption>
           <thead>
             <tr>
-              <th>Kod IATA</th>
-              <th>Miasto</th>
-              <th>Kraj</th>
+              <th scope="col">Kod IATA</th>
+              <th scope="col">Miasto</th>
+              <th scope="col">Kraj</th>
             </tr>
           </thead>
           <tbody>
             {schengen.map((d) => (
               <tr key={d.id}>
-                <td>{d.abbreviation}</td>
+                <th scope="row">{d.abbreviation}</th>
                 <td>{d.expansion}</td>
                 <td>{d.country}</td>
               </tr>
@@ -102,19 +102,19 @@ const PrintTables = () => {
       </div>
 
       <div className="non-schengen-container">
-        <h3>Strefa Non-Schengen</h3>
         <table className="admin-table compact-table">
+          <caption>Strefa Non-Schengen</caption>
           <thead>
             <tr>
-              <th>Kod IATA</th>
-              <th>Miasto</th>
-              <th>Kraj</th>
+              <th scope="col">Kod IATA</th>
+              <th scope="col">Miasto</th>
+              <th scope="col">Kraj</th>
             </tr>
           </thead>
           <tbody>
             {nonSchengen.map((d) => (
               <tr key={d.id}>
-                <td>{d.abbreviation}</td>
+                <th scope="row">{d.abbreviation}</th>
                 <td>{d.expansion}</td>
                 <td>{d.country}</td>
               </tr>
