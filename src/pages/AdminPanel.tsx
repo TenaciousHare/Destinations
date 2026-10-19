@@ -273,22 +273,22 @@ const AdminPanel = () => {
       <table className="admin-table">
         <thead>
           <tr>
-            <th onClick={() => requestSort("abbreviation")}>
+            <th scope="col" onClick={() => requestSort("abbreviation")}>
               IATA{getSortIndicator("abbreviation")}
             </th>
-            <th onClick={() => requestSort("expansion")}>
+            <th scope="col" onClick={() => requestSort("expansion")}>
               Miasto{getSortIndicator("expansion")}
             </th>
-            <th onClick={() => requestSort("country")}>
+            <th scope="col" onClick={() => requestSort("country")}>
               Kraj{getSortIndicator("country")}
             </th>
-            <th onClick={() => requestSort("zone")}>
+            <th scope="col" onClick={() => requestSort("zone")}>
               Strefa{getSortIndicator("zone")}
             </th>
-            <th onClick={() => requestSort("airport")}>
+            <th scope="col" onClick={() => requestSort("airport")}>
               Lotnisko startowe{getSortIndicator("airport")}
             </th>
-            <th>Akcja</th>
+            <th scope="col">Akcja</th>
           </tr>
         </thead>
         <tbody>
@@ -301,9 +301,7 @@ const AdminPanel = () => {
 
             return (
               <tr key={dest.id}>
-                <td>
-                  <strong>{dest.abbreviation}</strong>
-                </td>
+                <th scope="row">{dest.abbreviation}</th>
                 <td>{dest.expansion}</td>
                 <td>{dest.country}</td>
                 <td>
