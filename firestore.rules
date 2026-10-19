@@ -1,0 +1,57 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /destinations/{docId} {
+
+      // Odczyt publiczny – generator testów działa bez logowania
+      allow read: if true;
+
+      // Konto ograniczone -> jego jedyne dozwolone lotnisko (lub null)
+      function restrictedAirport() {
+        return request.auth.token.email == 'ktw@admin.com' ? 'KTW'
+             : request.auth.token.email == 'krk@admin.com' ? 'KRK'
+             : request.auth.token.email == 'ls@admin.com'  ? 'LS'
+             : null;
+      }
+
+      function isRestricted() {
+        return restrictedAirport() != null;
+      }
+
+      // Pełny admin: zalogowany, ale nie jest kontem ograniczonym
+      function isFullAdmin() {
+        return request.auth != null && !isRestricted();
+      }
+
+      // Walidacja kształtu wpisu
+      function validDestination(data) {
+        return data.keys().hasOnly(
+                 ['abbreviation', 'expansion', 'country', 'zone', 'airport'])
+          && data.abbreviation is string
+          && data.expansion is string
+          && data.country is string
+          && data.zone in ['Schengen', 'Non-Schengen']
+          && data.airport in ['KTW', 'KRK', 'LS'];
+      }
+
+      allow create: if request.auth != null
+        && validDestination(request.resource.data)
+        && (isFullAdmin()
+            || request.resource.data.airport == restrictedAirport());
+
+      // Edycja (UI jej nie używa, ale domykamy regułę): konto ograniczone
+      // nie może ani wyjść ze swojego lotniska, ani przejąć cudzego wpisu
+      allow update: if request.auth != null
+        && validDestination(request.resource.data)
+        && (isFullAdmin()
+            || (resource.data.airport == restrictedAirport()
+                && request.resource.data.airport == restrictedAirport()));
+
+      allow delete: if request.auth != null
+        && (isFullAdmin()
+            || resource.data.airport == restrictedAirport());
+    }
+  }
+}
